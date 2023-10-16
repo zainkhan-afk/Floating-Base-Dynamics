@@ -9,7 +9,7 @@ class FloatingBase(Link):
 	def GetGravityMatrix(self):
 		G = np.array([
 						[0],
-						[-self.link_object.body.mass*gravity],
+						[self.link_object.body.mass*gravity],
 						[0]
 					 ])
 

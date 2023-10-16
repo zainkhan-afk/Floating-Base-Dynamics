@@ -25,15 +25,15 @@ class PID:
 
 
 	def Solve(self, current_state, J, current_pos, current_body_theta, goal_pos, goal_body_theta):
-		edge1_position_current  = self.GetHipPosition(current_pos, current_body_theta,
-									hip_position = np.array([[self.edge1_pos[0], self.edge1_pos[1], 1]]))
-		edge2_position_current = self.GetHipPosition(current_pos,  current_body_theta,
-									hip_position = np.array([[self.edge2_pos[0], self.edge2_pos[1], 1]]))
+		edge1_position_current  = self.GetEdgePosition(current_pos, current_body_theta,
+									edge_position = np.array([[self.edge1_pos[0], self.edge1_pos[1], 1]]))
+		edge2_position_current = self.GetEdgePosition(current_pos,  current_body_theta,
+									edge_position = np.array([[self.edge2_pos[0], self.edge2_pos[1], 1]]))
 
-		edge1_position_goal  = self.GetHipPosition(goal_pos, goal_body_theta,
-									hip_position = np.array([[self.edge1_pos[0], self.edge1_pos[1], 1]]))
-		edge2_position_goal = self.GetHipPosition(goal_pos,  goal_body_theta,
-									hip_position = np.array([[self.edge2_pos[0], self.edge2_pos[1], 1]]))
+		edge1_position_goal  = self.GetEdgePosition(goal_pos, goal_body_theta,
+									edge_position = np.array([[self.edge1_pos[0], self.edge1_pos[1], 1]]))
+		edge2_position_goal = self.GetEdgePosition(goal_pos,  goal_body_theta,
+									edge_position = np.array([[self.edge2_pos[0], self.edge2_pos[1], 1]]))
 
 		current_pos = np.array(edge1_position_current + edge2_position_current)
 		goal_pos    = np.array(edge1_position_goal + edge2_position_goal)
@@ -46,4 +46,4 @@ class PID:
 		self.prev_error = error
 		self.error_sum += error
 
-		return new_state
+		return new_state, force

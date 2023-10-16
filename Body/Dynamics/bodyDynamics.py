@@ -32,19 +32,13 @@ class BodyDynamics:
 	def GetCompositeInertia(self):
 		return self.composite_inertia
 
-	def ForwardDynamics(self, forces, jacobian, state, old_torques = np.zeros((4, 1))):
+	def ForwardDynamics(self, forces, jacobian, state):
 		M = self.GetMassMatrix(state)
 		C = self.GetCoriolisMatrix(state)
 		G = self.GetGravityMatrix(state)
 
-		selection_vector = np.zeros((7, 1))
-		selection_vector[3: ] = old_torques
-
-		jacobian_body = jacobian[:3, :]
-		jacobian_legs = jacobian[3:, :]
-
-		EE_hind = np.array([[jacobian_body[2, 0], jacobian_body[2, 1]]])
-		EE_front  = np.array([[jacobian_body[2, 2], jacobian_body[2, 3]]])
+		EE_hind = np.array([[jacobian[2, 0], jacobian[2, 1]]])
+		EE_front  = np.array([[jacobian[2, 2], jacobian[2, 3]]])
 		
 		f_hind = np.array([[forces[0, 0], forces[1, 0]]])
 		f_front  = np.array([[forces[2, 0], forces[3, 0]]])
@@ -55,21 +49,17 @@ class BodyDynamics:
 		torque_from_hind = np.cross(EE_hind, f_hind)[0]
 		torque_from_front = np.cross(EE_front, f_front)[0]
 
-		forces_body = jacobian_body@forces
-		torque_legs = jacobian_legs.T@forces
+		forces_body = jacobian@forces
 
-		resultant_torques = np.zeros((7, 1))
+		resultant_torques = np.zeros((3, 1))
 		resultant_torques[:3, :] = forces_body
-		resultant_torques[3:, :] = torque_legs
 		resultant_torques[2, 0] = torque_from_front + torque_from_hind
-
-		joint_torques = resultant_torques[3:, :]
 
 		M_inv = GetInverseMatrix(M)
 
 		theta_double_dot = M_inv@(resultant_torques - C - G)
 
-		return theta_double_dot, joint_torques
+		return theta_double_dot
 
 
 	def GetMassMatrix(self, state):

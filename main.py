@@ -14,12 +14,16 @@ SCREEN_WIDTH, SCREEN_HEIGHT = 640, 480
 sim = Simulation(width = SCREEN_WIDTH, height = SCREEN_HEIGHT, delta_T = TIME_STEP, PPM = PPM, FPS = TARGET_FPS)
 ground = Ground(sim)
 body = Body(sim, ground, position = np.array([5.0, 5.0]), angle  = 0)
-pid_controller = PID(body.dynamicsModel, body.edge1_pos, cheetah.edge2_pos, P = 250, I = 1, D = 10)
+pid_controller = PID(body.dynamics_model, body.edge1_pos, body.edge2_pos, P = 250, I = 1, D = 10)
 
 sim.AddEntity(ground)
 sim.AddEntity(body)
 
 t = 0
+ang = 0
+new_state = None
+x = 5.0
+y = 5.0
 while True:
 	body.UpdateState()
 
@@ -40,11 +44,14 @@ while True:
 	# goal_body_theta = np.pi/36*np.sin(ang)
 
 
-	new_state = pid_controller.Solve(current_state, J, current_pos, current_body_theta, goal_pos, goal_body_theta)
-	body.ApplyState(new_state)
+	new_state, forces = pid_controller.Solve(current_state, J, current_pos, current_body_theta, goal_pos, goal_body_theta)
+	forces = np.array([0, 1, 0, 1]).astype("float")
+	# print(forces.shape)
+	body.ApplyState(new_state, forces)
 
 
 	ret = sim.Step()
 	t += TIME_STEP
+	ang += 0.001
 	if not ret:
 		sys.exit()

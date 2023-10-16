@@ -4,7 +4,7 @@ from .floatingBase import FloatingBase
 
 from utils import GetInverseMatrix, GetAngle
 
-class QuadrupedDynamics:
+class BodyDynamics:
 	def __init__(self, floating_base):
 		self.floating_base = FloatingBase(floating_base)
 		self.links = []

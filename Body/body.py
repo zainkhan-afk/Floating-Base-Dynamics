@@ -17,6 +17,8 @@ class Body:
 
 		self.state = State(position, np.array([0, 0]), np.array([0, 0]), angle, 0, 0)
 
+		self.dynamics_model = self.SetUpBodyDynamics()
+
 	def SetUpBodyDynamics(self):
 		floating_body_pos = np.array([self.floating_base.body.position[0], self.floating_base.body.position[1]])
 

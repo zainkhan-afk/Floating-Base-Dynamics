@@ -14,7 +14,7 @@ SCREEN_WIDTH, SCREEN_HEIGHT = 640, 480
 sim = Simulation(width = SCREEN_WIDTH, height = SCREEN_HEIGHT, delta_T = TIME_STEP, PPM = PPM, FPS = TARGET_FPS)
 ground = Ground(sim)
 body = Body(sim, ground, position = np.array([5.0, 5.0]), angle  = 0)
-pid_controller = PID(body.dynamics_model, body.edge1_pos, body.edge2_pos, P = 250, I = 1, D = 10)
+pid_controller = PID(body.dynamics_model, body.edge1_pos, body.edge2_pos, P = 50, I = 0.001, D = 10000)
 
 sim.AddEntity(ground)
 sim.AddEntity(body)
@@ -23,7 +23,7 @@ t = 0
 ang = 0
 new_state = None
 x = 5.0
-y = 5.0
+y = 6.0
 while True:
 	body.UpdateState()
 
@@ -38,17 +38,22 @@ while True:
 
 	current_pos = current_state.position
 	current_body_theta = current_state.body_theta
-	goal_pos = np.array([x + 0.05*np.cos(ang), y + 0.05*np.sin(ang)])
-	goal_body_theta = current_body_theta
+
+	goal_pos = np.array([x + 1*np.cos(ang), y + 1*np.sin(ang)])
+	goal_pos = np.array([x, y])
+	# goal_body_theta = current_body_theta
 	# goal_pos = current_pos
-	# goal_body_theta = np.pi/36*np.sin(ang)
+	goal_body_theta = np.sin(ang)
 
 
 	new_state, forces = pid_controller.Solve(current_state, J, current_pos, current_body_theta, goal_pos, goal_body_theta)
-	forces = np.array([0, 1, 0, 1]).astype("float")
+	# forces = np.array([0, 1, 0, 1]).astype("float")
 	# print(forces.shape)
 	body.ApplyState(new_state, forces)
 
+	# print()
+	# print(current_state)
+	# print(new_state)
 
 	ret = sim.Step()
 	t += TIME_STEP

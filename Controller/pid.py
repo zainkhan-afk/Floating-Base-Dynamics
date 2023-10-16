@@ -9,7 +9,7 @@ class PID:
 		self.P = P;
 		self.I = I;
 		self.D = D;
-
+  
 		self.prev_error = np.array([0, 0, 0, 0]).astype("float32")
 		self.error_sum = np.array([0, 0, 0, 0]).astype("float32")
 
@@ -38,8 +38,8 @@ class PID:
 		current_pos = np.array(edge1_position_current + edge2_position_current)
 		goal_pos    = np.array(edge1_position_goal + edge2_position_goal)
 
-		error = current_pos - goal_pos
-		force = self.P*error + self.D*(self.prev_error - error) + self.I*self.error_sum
+		error = goal_pos - current_pos
+		force = self.P*error + self.D*(error - self.prev_error) + self.I*self.error_sum
 
 		new_state = self.dynamicsSimulator.GoToNextStateFD(force.reshape(len(force), 1), J, current_state)
 

@@ -14,6 +14,6 @@ class SimulateDynamics:
 		body_theta_double_dot = theta_double_dot[2, 0]
 
 		new_state = current_state.UpdateUsingAcceleration(body_acc)
-		new_state = new_state.UpdateUsingBodyThetaDoubleDot(body_theta_double_dot)
+		# new_state = new_state.UpdateUsingBodyThetaDoubleDot(body_theta_double_dot)
 
 		return new_state

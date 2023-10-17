@@ -30,8 +30,8 @@ while True:
 	if new_state is not None:
 		error_state = body.CalculateStateError(new_state)
 		# error_state = current_state - new_state
-		# print("Difference between the predicted state and the actual state")
-		# print(error_state)
+		print("Difference between the predicted state and the actual state")
+		print(error_state)
 
 	current_state = body.GetState()
 	J = body.GetJacobian()
@@ -40,7 +40,7 @@ while True:
 	current_body_theta = current_state.body_theta
 
 	goal_pos = np.array([x + 0*np.cos(ang), y + 1*np.sin(ang)])
-	# goal_pos = np.array([x, y])
+	goal_pos = np.array([x, y])
 	goal_body_theta = current_body_theta
 	# goal_pos = current_pos
 	# goal_body_theta = np.sin(ang)
@@ -48,8 +48,8 @@ while True:
 
 	new_state, forces = pid_controller.Solve(current_state, J, current_pos, current_body_theta, goal_pos, goal_body_theta)
 	# forces = np.array([0, 1, 0, 1]).astype("float")
-	print(forces[1] + forces[3])
-	print((forces[1] + forces[3])/body.floating_base.body.mass + gravity)
+	print(forces[1], forces[3])
+	print((forces[1]*0.5 + forces[3]*0.5)/body.floating_base.body.mass + gravity)
 	body.ApplyState(new_state, forces)
 
 	print()
@@ -58,6 +58,6 @@ while True:
 
 	ret = sim.Step()
 	t += TIME_STEP
-	ang += 0.001
+	ang += 0.0001
 	if not ret:
 		sys.exit()

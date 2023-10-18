@@ -5,6 +5,7 @@ class Renderer:
 	def __init__(self, width, height):
 		self.background_color = (0, 0, 0)
 
+		pygame.init()
 		self.screen = pygame.display.set_mode((width, height))
 		pygame.display.set_caption("Rectangle Drawing")
 

@@ -35,22 +35,16 @@ while True:
 
 	current_state = body.GetState()
 
-	print()
-	print("Current State")
-	print(current_state)
-	print("New State")
-	print(new_state)
-
 	J = body.GetJacobian()
 
 	current_pos = current_state.position
 	current_body_theta = current_state.body_theta
 
-	# goal_pos = np.array([x + 0*np.cos(ang), y + 1*np.sin(ang)])
-	goal_pos = np.array([x, y])
+	goal_pos = np.array([x + 1*np.cos(ang), y + 1*np.sin(ang)])
+	# goal_pos = np.array([x, y])
 	goal_body_theta = current_body_theta
 	# goal_pos = current_pos
-	# goal_body_theta = np.sin(ang)
+	goal_body_theta = np.sin(ang)
 
 
 	new_state, forces = pid_controller.Solve(current_state, J, current_pos, current_body_theta, goal_pos, goal_body_theta)
@@ -62,6 +56,6 @@ while True:
 
 	ret = sim.Step()
 	t += TIME_STEP
-	ang += 0.0001
+	ang += 0.001
 	if not ret:
 		sys.exit()

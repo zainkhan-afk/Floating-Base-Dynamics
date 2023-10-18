@@ -23,7 +23,7 @@ t = 0
 ang = 0
 new_state = None
 x = 5.0
-y = 6.0
+y = 5.0
 while True:
 	body.UpdateState()
 
@@ -34,12 +34,19 @@ while True:
 		print(error_state)
 
 	current_state = body.GetState()
+
+	print()
+	print("Current State")
+	print(current_state)
+	print("New State")
+	print(new_state)
+
 	J = body.GetJacobian()
 
 	current_pos = current_state.position
 	current_body_theta = current_state.body_theta
 
-	goal_pos = np.array([x + 0*np.cos(ang), y + 1*np.sin(ang)])
+	# goal_pos = np.array([x + 0*np.cos(ang), y + 1*np.sin(ang)])
 	goal_pos = np.array([x, y])
 	goal_body_theta = current_body_theta
 	# goal_pos = current_pos
@@ -47,14 +54,11 @@ while True:
 
 
 	new_state, forces = pid_controller.Solve(current_state, J, current_pos, current_body_theta, goal_pos, goal_body_theta)
-	# forces = np.array([0, 1, 0, 1]).astype("float")
-	print(forces[1], forces[3])
-	print((forces[1]*0.5 + forces[3]*0.5)/body.floating_base.body.mass + gravity)
+	# forces = np.array([0, 1.5, 0, 1.5]).astype("float")
+	# print(forces[1], forces[3])
+	# print((forces[1]*0.5 + forces[3]*0.5)/body.floating_base.body.mass + gravity)
 	body.ApplyState(new_state, forces)
 
-	print()
-	print(current_state)
-	print(new_state)
 
 	ret = sim.Step()
 	t += TIME_STEP

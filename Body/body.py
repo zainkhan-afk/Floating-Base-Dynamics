@@ -88,6 +88,8 @@ class Body:
 		edge1_pos_wrt_world = np.array([world_T_edge1[0, -1], world_T_edge1[1, -1]])
 		edge2_pos_wrt_world = np.array([world_T_edge2[0, -1], world_T_edge2[1, -1]])
 
+		# self.floating_base.body.ApplyForce(force=(forces[2], forces[3]), point=(self.state.position[0], self.state.position[1]), wake=True)
+
 		self.floating_base.body.ApplyForce(force=(forces[0], forces[1]), point=(edge1_pos_wrt_world[0], edge1_pos_wrt_world[1]), wake=True)
 		self.floating_base.body.ApplyForce(force=(forces[2], forces[3]), point=(edge2_pos_wrt_world[0], edge2_pos_wrt_world[1]), wake=True)
 

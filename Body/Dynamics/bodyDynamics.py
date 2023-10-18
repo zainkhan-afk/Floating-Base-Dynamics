@@ -58,13 +58,13 @@ class BodyDynamics:
 		M_inv = GetInverseMatrix(M)
 
 		# print(forces)
-		print(resultant_torques)
+		# print(resultant_torques)
 		# print(G)
-		print(resultant_torques - C - G)
+		# print(resultant_torques - C - G)
 
 		theta_double_dot = M_inv@(resultant_torques - C - G)
 
-		print(theta_double_dot)
+		# print(theta_double_dot)
 
 		return theta_double_dot
 
